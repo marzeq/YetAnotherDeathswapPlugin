@@ -9,6 +9,11 @@
 # IntelliJ
 out/
 
+.classpath
+bin/
+.project
+.settings/
+
 # Compiled class file
 *.class
 
