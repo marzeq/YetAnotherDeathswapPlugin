@@ -1,8 +1,17 @@
 name: Deathswap
-version: '${project.version}'
+version: "${project.version}"
 main: me.marzeq.deathswap.Deathswap
 api-version: 1.16
 prefix: DS
-authors: [ marzeq ]
+authors: [marzeq]
 description: Basic deathswap plugin
 website: https://marzeq.me/
+commands:
+  dsstart:
+    usage: /dsstart
+    description: Start the deathswap
+    permission: ds.start
+  dsstop:
+    usage: /dstop
+    description: Forcefully stop the deathswap
+    permission: ds.stop

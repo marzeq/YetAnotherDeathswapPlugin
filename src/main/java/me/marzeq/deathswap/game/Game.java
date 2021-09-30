@@ -2,6 +2,7 @@ package me.marzeq.deathswap.game;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -14,6 +15,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.Sound;
 
 import me.marzeq.deathswap.Deathswap;
 import me.marzeq.deathswap.util.Util;
@@ -36,7 +38,7 @@ public class Game {
                 continue;
             else {
                 players.add(player);
-                player.sendMessage(Color.ORANGE + "Death swap starting soon...");
+                player.sendMessage(Color.ORANGE + "Added as a death swap player, game starting soon...");
             }
         }
 
@@ -58,6 +60,7 @@ public class Game {
         }
 
         for (Player player : players) {
+            player.setWalkSpeed(1);
             player.getInventory().clear();
             player.setHealth(20);
             player.setFoodLevel(20);
@@ -83,7 +86,24 @@ public class Game {
         return true;
     }
 
+    public Player endGame(boolean announceWinner) {
+        started = false;
+        players.clear();
+        if (announceWinner) {
+            Player winner = players.get(0);
+            winner.sendMessage(Color.GREEN + "You won the game!");
+            Util.sendMessageToPlayersInList((List<Player>) Bukkit.getOnlinePlayers(), Color.LIME + winner.getName() + " has won the game!");
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 1, 1);
+            }
+            return winner;
+        }
+        return null;
+    }
+
     private void swap(int minTime, int maxTime) {
+        if (!started)
+            return;
         final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         final ScheduledExecutorService scheduler2 = Executors.newScheduledThreadPool(1);
 

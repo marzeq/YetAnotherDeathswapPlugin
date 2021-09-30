@@ -2,6 +2,9 @@ package me.marzeq.deathswap;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import me.marzeq.deathswap.commands.Start;
+import me.marzeq.deathswap.commands.Stop;
+import me.marzeq.deathswap.events.PlayerDeath;
 import me.marzeq.deathswap.game.Game;
 
 public final class Deathswap extends JavaPlugin {
@@ -11,6 +14,9 @@ public final class Deathswap extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        getCommand("start").setExecutor(new Start());
+        getCommand("stop").setExecutor(new Stop());
+        getServer().getPluginManager().registerEvents(new PlayerDeath(), this);
         saveDefaultConfig();
         plugin = this;
     }
