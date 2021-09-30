@@ -2,7 +2,7 @@
 
 ---
 
-The user is allowed to use this software for any purpose, including modifying and redistributing it, but excluding using the source code of this software for commercial use without prior written permission from the author, plagiarism and/or modifying the software to cause harm to include malicious code.
+The user is allowed to use this software for any purpose, including modifying and redistributing it, but excluding using the source code of this software for commercial use without prior written permission from the author, plagiarism and/or modifying the software to include malicious code.
 You are required to credit the author of this software in any redistribution or modification.
 The user is also required to retain the copyright and license notice in all copies of this software.
 
