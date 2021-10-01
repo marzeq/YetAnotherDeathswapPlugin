@@ -9,7 +9,6 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.World;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -34,17 +33,19 @@ public class Game {
         int fireResistanceAfterSpawn = Deathswap.plugin().getConfig().getInt("fire-resistance-after-spawn");
 
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (!includeOps && player.isOp()) 
-                continue;
+            if (!includeOps) {
+                if (player.isOp())
+                    continue;
+            }
             else {
                 players.add(player);
-                player.sendMessage(Color.ORANGE + "Added as a death swap player, game starting soon...");
+                player.sendMessage("§eYou were added as a death swap player, game starting soon...");
             }
         }
 
-        if (players.size() % 2 != 2) {
+        if (players.size() % 2 != 0 || players.size() < 2) {
+            Util.sendMessageToPlayersInList(players, "§cNot enough players to start the game.");
             players.clear();
-            Util.sendMessageToPlayersInList(players, Color.RED + "Not enough players to start the game.");
             return false;
         }
         
@@ -53,14 +54,11 @@ public class Game {
             while (location == null)
                 location = Util.locationAt(Util.getRandomNumber(-worldBorderLenEachDirection, worldBorderLenEachDirection), Util.getRandomNumber(-worldBorderLenEachDirection, worldBorderLenEachDirection), world);
             
-            player.setWalkSpeed(0);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 999999));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 999999));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 999999, 255));
             player.teleport(location);
         }
 
         for (Player player : players) {
-            player.setWalkSpeed(1);
             player.getInventory().clear();
             player.setHealth(20);
             player.setFoodLevel(20);
@@ -71,8 +69,8 @@ public class Game {
             player.setFallDistance(0);
             for (PotionEffect effect : player.getActivePotionEffects())
                 player.removePotionEffect(effect.getType());
-            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, immunityAfterSpawn));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, fireResistanceAfterSpawn));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, immunityAfterSpawn * 20, Integer.MAX_VALUE));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, fireResistanceAfterSpawn * 20, Integer.MAX_VALUE));
         }
 
         final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -83,16 +81,17 @@ public class Game {
         }, Util.getRandomNumber(minTime, maxTime), SECONDS);
         
         started = true;
+        Util.sendMessageToPlayersInList(players, "§aGame started!");
         return true;
     }
 
     public Player endGame(boolean announceWinner) {
         started = false;
+        Player winner = players.get(0);
         players.clear();
         if (announceWinner) {
-            Player winner = players.get(0);
-            winner.sendMessage(Color.GREEN + "You won the game!");
-            Util.sendMessageToPlayersInList((List<Player>) Bukkit.getOnlinePlayers(), Color.LIME + winner.getName() + " has won the game!");
+            winner.sendMessage("§aYou won the game!");
+            Util.sendMessageToPlayersInList((List<Player>) Bukkit.getOnlinePlayers(), "§b" + winner.getName() + "§a has won the game!");
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 1, 1);
             }
@@ -112,16 +111,23 @@ public class Game {
 
             public void run() {
                 if (countdownStarter > 0) {
-                    Util.sendMessageToPlayersInList(players, Color.RED + "Swapping in " + Color.YELLOW + countdownStarter + Color.RED + " seconds...");
+                    Util.sendMessageToPlayersInList(players, "§cSwapping in §e" + countdownStarter + "§c seconds...");
                     countdownStarter--;
                 }
                 else {
-                    Util.sendMessageToPlayersInList(players, Color.RED + "Swapping!");
+                    Util.sendMessageToPlayersInList(players, "§cSwapping!");
 
                     Collections.shuffle(players);
-                    for (int i = 0; i < players.size() / 2; i++) {
-                        players.get(i).teleport(players.get(players.size() - i).getLocation());
-                        players.get(players.size() - i).teleport(players.get(i).getLocation());
+
+                    double[] player1Pos = {players.get(0).getLocation().getX(), players.get(0).getLocation().getY(), players.get(0).getLocation().getZ()};
+                    for (int i = 0; i < players.size(); i++) {
+                        Player player = players.get(i);
+                        if (i + 1 == players.size()) {
+                            player.getLocation().set(player1Pos[0], player1Pos[1], player1Pos[2]);
+                            break;
+                        }
+                        double[] nextPlayerPos = {players.get(i + 1).getLocation().getX(), players.get(i + 1).getLocation().getY(), players.get(i + 1).getLocation().getZ()};
+                        player.getLocation().set(nextPlayerPos[0], nextPlayerPos[1], nextPlayerPos[2]);
                     }
                 }
             }

@@ -1,6 +1,5 @@
 package me.marzeq.deathswap.commands;
 
-import org.bukkit.Color;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -20,7 +19,7 @@ public class Stop implements CommandExecutor {
         Player player = (Player) sender;
 
         if (Util.hasPermission(player, "stop")) {
-            player.sendMessage(Color.YELLOW + "Stopping game...");
+            player.sendMessage("§eStopping game...");
         }
         else {
             player.sendMessage(Util.permissionErrorMessage);
@@ -28,11 +27,12 @@ public class Stop implements CommandExecutor {
         }
 
         if (!Deathswap.plugin().game.started) {
-            player.sendMessage(Color.RED + "No game running!");
+            player.sendMessage("§cNo game running!");
             return true;
         }
 
         Deathswap.plugin().game.endGame(false);
+        player.sendMessage("§aGame stopped!");
 
         return true;
     }

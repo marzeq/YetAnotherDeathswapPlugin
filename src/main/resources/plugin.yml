@@ -15,3 +15,11 @@ commands:
     usage: /dstop
     description: Forcefully stop the deathswap
     permission: ds.stop
+  dsreload:
+    usage: /dsreload
+    description: Reload the config file
+    permission: ds.reload
+  dsgetconfig:
+    usage: /dsgetconfig
+    description: Gets a value from the configuration file
+    permission: ds.reload

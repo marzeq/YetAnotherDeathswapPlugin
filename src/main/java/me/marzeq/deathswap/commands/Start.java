@@ -1,6 +1,5 @@
 package me.marzeq.deathswap.commands;
 
-import org.bukkit.Color;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -20,7 +19,7 @@ public class Start implements CommandExecutor {
         Player player = (Player) sender;
 
         if (Util.hasPermission(player, "start")) {
-            player.sendMessage(Color.YELLOW + "Starting game...");
+            player.sendMessage("§eStarting the game...");
         }
         else {
             player.sendMessage(Util.permissionErrorMessage);
@@ -28,11 +27,11 @@ public class Start implements CommandExecutor {
         }
 
         if (Deathswap.plugin().game.started) {
-            player.sendMessage(Color.RED + "Game has already started!");
+            player.sendMessage("§cGame has already started!");
             return true;
         }
         else if (!Deathswap.plugin().game.start()) {
-            player.sendMessage(Color.RED + "Number of players must be a multiple of 2!");
+            player.sendMessage("§cNumber of players must be bigger or equal to 2 and a multiple of 2!");
             return true;
         }
 
