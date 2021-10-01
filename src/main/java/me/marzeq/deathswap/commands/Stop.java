@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import me.marzeq.deathswap.Deathswap;
-import me.marzeq.deathswap.util.Util;
+import me.marzeq.deathswap.util.PlayerUtils;
 
 public class Stop implements CommandExecutor {
     @Override
@@ -18,11 +18,11 @@ public class Stop implements CommandExecutor {
         }
         Player player = (Player) sender;
 
-        if (Util.hasPermission(player, "stop")) {
+        if (PlayerUtils.hasPermission(player, "stop")) {
             player.sendMessage("§eStopping game...");
         }
         else {
-            player.sendMessage(Util.permissionErrorMessage);
+            player.sendMessage(PlayerUtils.permissionErrorMessage);
             return true;
         }
 

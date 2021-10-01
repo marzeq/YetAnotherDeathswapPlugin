@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import me.marzeq.deathswap.Deathswap;
-import me.marzeq.deathswap.util.Util;
+import me.marzeq.deathswap.util.PlayerUtils;
 
 public class GetConfig implements CommandExecutor {
     @Override
@@ -15,11 +15,11 @@ public class GetConfig implements CommandExecutor {
             sender.sendMessage("§cPlease provide the key.");
             return true;
         }
-        if (Util.hasPermission(sender, "getconfig")) {
+        if (PlayerUtils.hasPermission(sender, "getconfig")) {
             sender.sendMessage(String.valueOf(Deathswap.plugin().getConfig().get(args[0])));
         }
         else {
-            sender.sendMessage(Util.permissionErrorMessage);
+            sender.sendMessage(PlayerUtils.permissionErrorMessage);
         }
 
         return true;

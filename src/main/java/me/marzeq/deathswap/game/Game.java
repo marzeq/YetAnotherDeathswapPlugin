@@ -1,11 +1,7 @@
 package me.marzeq.deathswap.game;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 
 import org.bukkit.Bukkit;
@@ -17,11 +13,15 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.Sound;
 
 import me.marzeq.deathswap.Deathswap;
-import me.marzeq.deathswap.util.Util;
+import me.marzeq.deathswap.util.PlayerUtils;
+import me.marzeq.deathswap.util.TeleportUtils;
 
 public class Game {
     public ArrayList<Player> players = new ArrayList<Player>();
     public boolean started = false;
+    private int timer = 10;
+    int taskID;
+    boolean runningCountdown = false;
 
     public boolean start() {
         World world = Bukkit.getWorlds().get(0);
@@ -44,18 +44,14 @@ public class Game {
         }
 
         if (players.size() % 2 != 0 || players.size() < 2) {
-            Util.sendMessageToPlayersInList(players, "§cNot enough players to start the game.");
+            PlayerUtils.sendMessageToPlayersInList(players, "§cNot enough players to start the game.");
             players.clear();
             return false;
         }
         
         for (Player player : players) {
-            Location location = Util.locationAt(Util.getRandomNumber(-worldBorderLenEachDirection, worldBorderLenEachDirection), Util.getRandomNumber(-worldBorderLenEachDirection, worldBorderLenEachDirection), world);
-            while (location == null)
-                location = Util.locationAt(Util.getRandomNumber(-worldBorderLenEachDirection, worldBorderLenEachDirection), Util.getRandomNumber(-worldBorderLenEachDirection, worldBorderLenEachDirection), world);
-            
             player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 999999, 255));
-            player.teleport(location);
+            player.teleport(TeleportUtils.findSafeLocation(player));
         }
 
         for (Player player : players) {
@@ -72,16 +68,14 @@ public class Game {
             player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, immunityAfterSpawn * 20, Integer.MAX_VALUE));
             player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, fireResistanceAfterSpawn * 20, Integer.MAX_VALUE));
         }
-
-        final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.schedule(new Runnable(){
-            public void run() {
-                swap(minTime, maxTime);
-            }
-        }, Util.getRandomNumber(minTime, maxTime), SECONDS);
         
         started = true;
-        Util.sendMessageToPlayersInList(players, "§aGame started!");
+        PlayerUtils.sendMessageToPlayersInList(players, "§aGame started!");
+
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Deathswap.plugin(), () -> {
+            swap(minTime, maxTime);
+        }, PlayerUtils.getRandomNumber(minTime, maxTime)*20);
+
         return true;
     }
 
@@ -91,9 +85,9 @@ public class Game {
         players.clear();
         if (announceWinner) {
             winner.sendMessage("§aYou won the game!");
-            Util.sendMessageToPlayersInList((List<Player>) Bukkit.getOnlinePlayers(), "§b" + winner.getName() + "§a has won the game!");
+            PlayerUtils.sendMessageToPlayersInList((List<Player>) Bukkit.getOnlinePlayers(), "§b" + winner.getName() + "§a has won the game!");
             for (Player player : Bukkit.getOnlinePlayers()) {
-                player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 1, 1);
+                player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, .5f, 1);
             }
             return winner;
         }
@@ -103,40 +97,39 @@ public class Game {
     private void swap(int minTime, int maxTime) {
         if (!started)
             return;
-        final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        final ScheduledExecutorService scheduler2 = Executors.newScheduledThreadPool(1);
 
-        scheduler.scheduleAtFixedRate(new Runnable() {
-            int countdownStarter = 10;
+        taskID = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Deathswap.plugin(), () -> {
+            if (!started || runningCountdown) {
+                Bukkit.getServer().getScheduler().cancelTask(taskID);
+                return;
+            }
+            runningCountdown = true;
+            if (timer > 0) {
+                PlayerUtils.sendMessageToPlayersInList(players, "§cSwapping in §e" + timer + "§c seconds...");
+                timer--;
+            }
+            else {
+                PlayerUtils.sendMessageToPlayersInList(players, "§cSwapping!");
 
-            public void run() {
-                if (countdownStarter > 0) {
-                    Util.sendMessageToPlayersInList(players, "§cSwapping in §e" + countdownStarter + "§c seconds...");
-                    countdownStarter--;
-                }
-                else {
-                    Util.sendMessageToPlayersInList(players, "§cSwapping!");
-
-                    Collections.shuffle(players);
-
-                    double[] player1Pos = {players.get(0).getLocation().getX(), players.get(0).getLocation().getY(), players.get(0).getLocation().getZ()};
-                    for (int i = 0; i < players.size(); i++) {
-                        Player player = players.get(i);
-                        if (i + 1 == players.size()) {
-                            player.getLocation().set(player1Pos[0], player1Pos[1], player1Pos[2]);
-                            break;
-                        }
-                        double[] nextPlayerPos = {players.get(i + 1).getLocation().getX(), players.get(i + 1).getLocation().getY(), players.get(i + 1).getLocation().getZ()};
-                        player.getLocation().set(nextPlayerPos[0], nextPlayerPos[1], nextPlayerPos[2]);
+                Location player1Pos = players.get(0).getLocation();
+                for (int i = 0; i < players.size(); i++) {
+                    Player player = players.get(i);
+                    if (i == players.size() - 1) {
+                        player.teleport(player1Pos);
+                        break;
                     }
+                    Location nextPlayerPos = players.get(i + 1).getLocation();
+                    player.teleport(nextPlayerPos);
                 }
-            }
-        }, 0, 1, SECONDS);
 
-        scheduler2.schedule(new Runnable(){
-            public void run() {
-                swap(minTime, maxTime);
+                timer = 10;
+                runningCountdown = false;
+                Bukkit.getServer().getScheduler().cancelTask(taskID);
             }
-        }, Util.getRandomNumber(minTime, maxTime) + 10, SECONDS);
+        }, 0, 20);
+
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Deathswap.plugin(), () -> {
+            swap(minTime, maxTime);
+        }, PlayerUtils.getRandomNumber(minTime, maxTime)*20+200);
     }
 }
