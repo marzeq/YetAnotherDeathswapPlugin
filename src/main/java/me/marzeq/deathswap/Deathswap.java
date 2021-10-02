@@ -2,7 +2,6 @@ package me.marzeq.deathswap;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.marzeq.deathswap.commands.GetConfig;
 import me.marzeq.deathswap.commands.Reload;
 import me.marzeq.deathswap.commands.Start;
 import me.marzeq.deathswap.commands.Stop;
@@ -20,7 +19,6 @@ public final class Deathswap extends JavaPlugin {
         getCommand("dsstart").setExecutor(new Start());
         getCommand("dsstop").setExecutor(new Stop());
         getCommand("dsreload").setExecutor(new Reload());
-        getCommand("dsgetconfig").setExecutor(new GetConfig());
         getServer().getPluginManager().registerEvents(new PlayerDeath(), this);
         plugin = this;
     }

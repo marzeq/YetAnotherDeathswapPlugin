@@ -29,7 +29,7 @@ public class Game {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!includeOps) {
-                if (player.isOp())
+                if (player.isOp() || player.hasPermission("ds.op"))
                     continue;
             } else {
                 players.add(player);

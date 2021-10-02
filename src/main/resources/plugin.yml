@@ -19,7 +19,14 @@ commands:
     usage: /dsreload
     description: Reload the config file
     permission: ds.reload
-  dsgetconfig:
-    usage: /dsgetconfig
-    description: Gets a value from the configuration file
-    permission: ds.reload
+permissions:
+  ds.*:
+    description: All permissions (excluding ds.op)
+  ds.stop:
+    description: Forcefully stop the deathswap
+  ds.start:
+    description: Start the deathswap
+  ds.reload:
+    description: Reload the config file
+  ds.op:
+    description: Makrs a player as OP, even though they may not be
