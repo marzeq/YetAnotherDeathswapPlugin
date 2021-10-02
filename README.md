@@ -12,11 +12,11 @@
 
 ## Permissions
 
-| Permission  | Description                     |
+| Permission  | Command/Functionality           |
 | ----------- | ------------------------------- |
-| `ds.start`  | Start the deathswap             |
-| `ds.stop`   | Forcefully stop the deathswap   |
-| `ds.reload` | Reload the config file          |
+| `ds.start`  | /dsstart                        |
+| `ds.stop`   | /dsstop                         |
+| `ds.reload` | /dsreload                       |
 | `ds.op`     | Treat the player as OP          |
 | `ds.*`      | All permissions, except `ds.op` |
 
