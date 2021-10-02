@@ -28,7 +28,7 @@ public class Start implements CommandExecutor {
             player.sendMessage("§cGame has already started!");
             return true;
         } else if (!Deathswap.plugin().game.start()) {
-            player.sendMessage("§cNumber of players must be bigger or equal to 2 and a multiple of 2!");
+            player.sendMessage("§cNumber of players must be bigger or equal to 2!");
             return true;
         }
 

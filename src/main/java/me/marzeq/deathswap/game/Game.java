@@ -18,7 +18,6 @@ public class Game {
     public boolean started = false;
     private int timer = 10;
     int taskID;
-    boolean runningCountdown = false;
 
     public boolean start() {
         boolean includeOps = Deathswap.plugin().getConfig().getBoolean("include-ops");
@@ -38,7 +37,7 @@ public class Game {
             }
         }
 
-        if (players.size() % 2 != 0 || players.size() < 2) {
+        if (players.size() < 2) {
             PlayerUtils.sendMessageToPlayersInList(players, "§cNot enough players to start the game.");
             players.clear();
             return false;
@@ -99,11 +98,10 @@ public class Game {
             return;
 
         taskID = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Deathswap.plugin(), () -> {
-            if (!started || runningCountdown) {
+            if (!started || timer < 0) {
                 Bukkit.getServer().getScheduler().cancelTask(taskID);
                 return;
             }
-            runningCountdown = true;
             if (timer > 0) {
                 PlayerUtils.sendMessageToPlayersInList(players, "§cSwapping in §e§l" + timer + "§c seconds...");
                 timer--;
@@ -122,7 +120,6 @@ public class Game {
                 }
 
                 timer = 10;
-                runningCountdown = false;
                 Bukkit.getServer().getScheduler().cancelTask(taskID);
             }
         }, 0, 20);

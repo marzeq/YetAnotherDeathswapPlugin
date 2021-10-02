@@ -18,7 +18,7 @@ public class Stop implements CommandExecutor {
         Player player = (Player) sender;
 
         if (PlayerUtils.hasPermission(player, "stop")) {
-            player.sendMessage("§eStopping game...");
+            player.sendMessage("§eStopping the game...");
         } else {
             player.sendMessage(PlayerUtils.permissionErrorMessage);
             return true;
