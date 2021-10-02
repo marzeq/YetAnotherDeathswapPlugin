@@ -14,7 +14,7 @@ public class PlayerDeath implements Listener {
 
         if (Deathswap.plugin().game.players.contains(event.getEntity()))
             Deathswap.plugin().game.players.remove(event.getEntity());
-        
+
         if (Deathswap.plugin().game.players.size() == 1)
             Deathswap.plugin().game.endGame(true);
     }

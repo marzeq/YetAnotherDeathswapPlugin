@@ -8,11 +8,13 @@ import org.bukkit.entity.Player;
 
 public class PlayerUtils {
     public static boolean hasPermission(Player player, String permission) {
-        return player.hasPermission("ds." + permission) || player.hasPermission("ds.*") || player.hasPermission("*") || player.isOp();
+        return player.hasPermission("ds." + permission) || player.hasPermission("ds.*") || player.hasPermission("*")
+                || player.isOp();
     }
 
     public static boolean hasPermission(CommandSender sender, String permission) {
-        return sender.hasPermission("ds." + permission) || sender.hasPermission("ds.*") || sender.hasPermission("*") || sender.isOp();
+        return sender.hasPermission("ds." + permission) || sender.hasPermission("ds.*") || sender.hasPermission("*")
+                || sender.isOp();
     }
 
     public static final String permissionErrorMessage = "§c§lYou don't have permission to use this command!";

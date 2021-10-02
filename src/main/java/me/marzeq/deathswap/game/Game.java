@@ -31,8 +31,7 @@ public class Game {
             if (!includeOps) {
                 if (player.isOp())
                     continue;
-            }
-            else {
+            } else {
                 players.add(player);
                 player.sendMessage("§aYou were added as a death swap player. §eGame starting soon!");
                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
@@ -44,7 +43,7 @@ public class Game {
             players.clear();
             return false;
         }
-        
+
         for (Player player : players) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 999999, 255));
             player.teleport(TeleportUtils.findSafeLocation(player));
@@ -54,6 +53,8 @@ public class Game {
             player.getInventory().clear();
             player.setHealth(20);
             player.setFoodLevel(20);
+            player.setSaturation(5); // (from Minecraft wiki on saturaion) Its initial value on world creation or
+                                     // respawn is 5.
             player.setFireTicks(0);
             player.setGameMode(org.bukkit.GameMode.SURVIVAL);
             player.setAllowFlight(false);
@@ -61,16 +62,18 @@ public class Game {
             player.setFallDistance(0);
             for (PotionEffect effect : player.getActivePotionEffects())
                 player.removePotionEffect(effect.getType());
-            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, immunityAfterSpawn * 20, Integer.MAX_VALUE));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, fireResistanceAfterSpawn * 20, Integer.MAX_VALUE));
+            player.addPotionEffect(
+                    new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, immunityAfterSpawn * 20, Integer.MAX_VALUE));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, fireResistanceAfterSpawn * 20,
+                    Integer.MAX_VALUE));
         }
-        
+
         started = true;
         PlayerUtils.sendMessageToPlayersInList(players, "§aGame started!");
 
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Deathswap.plugin(), () -> {
             swap(minTime, maxTime);
-        }, PlayerUtils.getRandomNumber(minTime, maxTime)*20);
+        }, PlayerUtils.getRandomNumber(minTime, maxTime) * 20);
 
         return true;
     }
@@ -81,7 +84,8 @@ public class Game {
         players.clear();
         if (announceWinner) {
             winner.sendMessage("§a§lYou won the game!");
-            PlayerUtils.sendMessageToPlayersInList(Bukkit.getOnlinePlayers(), "§b§l" + winner.getName() + "§a has won the game!");
+            PlayerUtils.sendMessageToPlayersInList(Bukkit.getOnlinePlayers(),
+                    "§b§l" + winner.getName() + "§a has won the game!");
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, .5f, 1);
             }
@@ -103,8 +107,7 @@ public class Game {
             if (timer > 0) {
                 PlayerUtils.sendMessageToPlayersInList(players, "§cSwapping in §e§l" + timer + "§c seconds...");
                 timer--;
-            }
-            else {
+            } else {
                 PlayerUtils.sendMessageToPlayersInList(players, "§c§lSwapping!");
 
                 Location player1Pos = players.get(0).getLocation();
@@ -126,6 +129,6 @@ public class Game {
 
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Deathswap.plugin(), () -> {
             swap(minTime, maxTime);
-        }, PlayerUtils.getRandomNumber(minTime, maxTime)*20+200);
+        }, PlayerUtils.getRandomNumber(minTime, maxTime) * 20 + 200);
     }
 }
