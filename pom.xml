@@ -7,9 +7,9 @@
     <version>1.0.3</version>
     <packaging>jar</packaging>
 
-    <name>Deathswap</name>
+    <name>Yet Another Deathswap Plugin</name>
 
-    <description>Basic deathswap plugin</description>
+    <description>Basic lightweight deathswap plugin</description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
