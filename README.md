@@ -1,6 +1,6 @@
-# Basic lightweight deathswap plugin
+# Yet Another Deathswap Plugin
 
-**This plugin supports 1.16.5! It is not guaranteed it will work with earlier/later versions of Spigot!**
+**This plugin supports 1.16.5! It is not guaranteed it will work with earlier/later versions of Spigot! (I will test 1.17 soon-ish)**
 
 ## Commands
 
