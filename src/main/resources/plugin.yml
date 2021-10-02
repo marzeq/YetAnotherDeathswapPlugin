@@ -8,7 +8,7 @@ description: Basic deathswap plugin
 website: https://marzeq.me/
 commands:
   dsstart:
-    usage: /dsstart
+    usage: /dsstart (optional - user1, user2, user3...)
     description: Start the deathswap
     permission: ds.start
   dsstop:

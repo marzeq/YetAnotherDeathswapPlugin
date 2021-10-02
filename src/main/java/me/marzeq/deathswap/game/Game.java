@@ -21,20 +21,28 @@ public class Game {
     int taskID;
 
     public boolean start() {
+        return start(new ArrayList<Player>());
+    }
+
+    public boolean start(ArrayList<Player> players) {
         boolean includeOps = Deathswap.plugin().getConfig().getBoolean("include-ops");
         int minTime = Deathswap.plugin().getConfig().getInt("min-time");
         int maxTime = Deathswap.plugin().getConfig().getInt("max-time");
         int immunityAfterSpawn = Deathswap.plugin().getConfig().getInt("immunity-after-spawn");
         int fireResistanceAfterSpawn = Deathswap.plugin().getConfig().getInt("fire-resistance-after-spawn");
 
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (!includeOps) {
-                if (player.isOp() || player.hasPermission("ds.op"))
-                    continue;
+        this.players = players;
+
+        if (players.size() == 0) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (!includeOps) {
+                    if (player.isOp() || player.hasPermission("ds.op"))
+                        continue;
+                }
+                players.add(player);
+                player.sendMessage("§aYou were added as a death swap player. §eGame starting soon!");
+                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
             }
-            players.add(player);
-            player.sendMessage("§aYou were added as a death swap player. §eGame starting soon!");
-            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
         }
 
         if (players.size() < 2) {
