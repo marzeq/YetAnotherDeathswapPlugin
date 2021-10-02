@@ -31,11 +31,10 @@ public class Game {
             if (!includeOps) {
                 if (player.isOp() || player.hasPermission("ds.op"))
                     continue;
-            } else {
-                players.add(player);
-                player.sendMessage("§aYou were added as a death swap player. §eGame starting soon!");
-                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
             }
+            players.add(player);
+            player.sendMessage("§aYou were added as a death swap player. §eGame starting soon!");
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
         }
 
         if (players.size() < 2) {
