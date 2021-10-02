@@ -1,6 +1,7 @@
 package me.marzeq.deathswap.game;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -107,6 +108,8 @@ public class Game {
                 timer--;
             } else {
                 PlayerUtils.sendMessageToPlayersInList(players, "§c§lSwapping!");
+
+                Collections.shuffle(players);
 
                 Location player1Pos = players.get(0).getLocation();
                 for (int i = 0; i < players.size(); i++) {
