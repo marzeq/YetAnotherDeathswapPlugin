@@ -4,7 +4,7 @@
 
     <groupId>me.marzeq</groupId>
     <artifactId>deathswap</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
 
     <name>Deathswap</name>
