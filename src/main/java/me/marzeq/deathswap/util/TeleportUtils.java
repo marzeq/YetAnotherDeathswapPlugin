@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import java.util.HashSet;
 
 public class TeleportUtils {
-    //List of all the unsafe blocks
     public static HashSet<Material> bad_blocks = new HashSet<>();
  
     static {
@@ -45,12 +44,11 @@ public class TeleportUtils {
         int x = location.getBlockX();
         int y = location.getBlockY();
         int z = location.getBlockZ();
-        //Get instances of the blocks around where the player would spawn
+
         Block block = location.getWorld().getBlockAt(x, y, z);
         Block below = location.getWorld().getBlockAt(x, y - 1, z);
         Block above = location.getWorld().getBlockAt(x, y + 1, z);
  
-        //Check to see if the surroundings are safe or not
         return !(bad_blocks.contains(below.getType())) || (block.getType().isSolid()) || (above.getType().isSolid());
     }
 }

@@ -1,11 +1,8 @@
 package me.marzeq.deathswap.game;
 
 import java.util.ArrayList;
-import java.util.List;
-
 
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -24,8 +21,6 @@ public class Game {
     boolean runningCountdown = false;
 
     public boolean start() {
-        World world = Bukkit.getWorlds().get(0);
-        int worldBorderLenEachDirection = (int) world.getWorldBorder().getSize() / 2;
         boolean includeOps = Deathswap.plugin().getConfig().getBoolean("include-ops");
         int minTime = Deathswap.plugin().getConfig().getInt("min-time");
         int maxTime = Deathswap.plugin().getConfig().getInt("max-time");
@@ -39,7 +34,8 @@ public class Game {
             }
             else {
                 players.add(player);
-                player.sendMessage("§eYou were added as a death swap player, game starting soon...");
+                player.sendMessage("§aYou were added as a death swap player. §eGame starting soon!");
+                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
             }
         }
 
@@ -84,8 +80,8 @@ public class Game {
         Player winner = players.get(0);
         players.clear();
         if (announceWinner) {
-            winner.sendMessage("§aYou won the game!");
-            PlayerUtils.sendMessageToPlayersInList((List<Player>) Bukkit.getOnlinePlayers(), "§b" + winner.getName() + "§a has won the game!");
+            winner.sendMessage("§a§lYou won the game!");
+            PlayerUtils.sendMessageToPlayersInList(Bukkit.getOnlinePlayers(), "§b§l" + winner.getName() + "§a has won the game!");
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, .5f, 1);
             }
@@ -105,11 +101,11 @@ public class Game {
             }
             runningCountdown = true;
             if (timer > 0) {
-                PlayerUtils.sendMessageToPlayersInList(players, "§cSwapping in §e" + timer + "§c seconds...");
+                PlayerUtils.sendMessageToPlayersInList(players, "§cSwapping in §e§l" + timer + "§c seconds...");
                 timer--;
             }
             else {
-                PlayerUtils.sendMessageToPlayersInList(players, "§cSwapping!");
+                PlayerUtils.sendMessageToPlayersInList(players, "§c§lSwapping!");
 
                 Location player1Pos = players.get(0).getLocation();
                 for (int i = 0; i < players.size(); i++) {
