@@ -1,6 +1,6 @@
-# Basic lightweight deathswap plugin
+# Yet Another Deathswap Plugin
 
-**This plugin supports 1.16.5! It is not guaranteed it will work with earlier/later versions of Spigot!**
+**This plugin supports 1.16.5! It is not guaranteed it will work with earlier/later versions of Spigot! (I will test 1.17 soon-ish)**
 
 ## Commands
 
@@ -12,11 +12,11 @@
 
 ## Permissions
 
-| Permission  | Description                     |
+| Permission  | Command/Functionality           |
 | ----------- | ------------------------------- |
-| `ds.start`  | Start the deathswap             |
-| `ds.stop`   | Forcefully stop the deathswap   |
-| `ds.reload` | Reload the config file          |
+| `ds.start`  | /dsstart                        |
+| `ds.stop`   | /dsstop                         |
+| `ds.reload` | /dsreload                       |
 | `ds.op`     | Treat the player as OP          |
 | `ds.*`      | All permissions, except `ds.op` |
 
