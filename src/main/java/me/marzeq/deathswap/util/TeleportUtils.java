@@ -17,11 +17,14 @@ public class TeleportUtils {
     }
 
     public static Location generateLocation(Player player) {
-        int worldBorderLenEachDirection = (int) player.getWorld().getWorldBorder().getSize() / 2;
+        int worldBorderLenEachDirection = (int) player.getWorld().getWorldBorder().getSize() / 2,
+                worldBorderOffsetX = (int) player.getWorld().getWorldBorder().getCenter().getX(),
+                worldBorderOffsetZ = (int) player.getWorld().getWorldBorder().getCenter().getZ();
 
-        int x = PlayerUtils.getRandomNumber(-worldBorderLenEachDirection, worldBorderLenEachDirection);
-        int z = PlayerUtils.getRandomNumber(-worldBorderLenEachDirection, worldBorderLenEachDirection);
-        int y = 150;
+
+        int x = PlayerUtils.getRandomNumber(-worldBorderLenEachDirection, worldBorderLenEachDirection) - worldBorderOffsetX;
+        int z = PlayerUtils.getRandomNumber(-worldBorderLenEachDirection, worldBorderLenEachDirection) - worldBorderOffsetZ;
+        int y = 256;
 
         Location randomLocation = new Location(player.getWorld(), x, y, z);
         y = randomLocation.getWorld().getHighestBlockYAt(randomLocation);

@@ -1,6 +1,5 @@
 min-time: 120 # in seconds
 max-time: 300 # in seconds
 fire-resistance-after-spawn: 330 # in seconds
-immunity-after-spawn: 10 # in seconds
-# player-spawn-distance: 250
+resistance-after-spawn: 10 # in seconds
 include-ops: false

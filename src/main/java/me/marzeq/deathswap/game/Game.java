@@ -28,7 +28,7 @@ public class Game {
         boolean includeOps = Deathswap.plugin().getConfig().getBoolean("include-ops");
         int minTime = Deathswap.plugin().getConfig().getInt("min-time");
         int maxTime = Deathswap.plugin().getConfig().getInt("max-time");
-        int immunityAfterSpawn = Deathswap.plugin().getConfig().getInt("immunity-after-spawn");
+        int resistanceAfterSpawn = Deathswap.plugin().getConfig().getInt("resistance-after-spawn");
         int fireResistanceAfterSpawn = Deathswap.plugin().getConfig().getInt("fire-resistance-after-spawn");
 
         this.players = players;
@@ -70,7 +70,7 @@ public class Game {
             for (PotionEffect effect : player.getActivePotionEffects())
                 player.removePotionEffect(effect.getType());
             player.addPotionEffect(
-                    new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, immunityAfterSpawn * 20, Integer.MAX_VALUE));
+                    new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, resistanceAfterSpawn * 20, Integer.MAX_VALUE));
             player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, fireResistanceAfterSpawn * 20,
                     Integer.MAX_VALUE));
         }
